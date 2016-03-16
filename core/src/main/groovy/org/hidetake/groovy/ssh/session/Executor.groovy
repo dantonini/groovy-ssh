@@ -18,34 +18,34 @@ class Executor {
     /**
      * Execute {@link Plan}s.
      *
-     * @param compositeSettings
+     * @param globalSettings
      * @param plans
      * @return results of each plan
      */
-    def <T> List<T> execute(CompositeSettings compositeSettings, List<Plan<T>> plans) {
-        if (compositeSettings.dryRun) {
-            dryRun(compositeSettings, plans)
+    def <T> List<T> execute(CompositeSettings globalSettings, List<Plan<T>> plans) {
+        if (globalSettings.dryRun) {
+            dryRun(globalSettings, plans)
         } else {
-            wetRun(compositeSettings, plans)
+            wetRun(globalSettings, plans)
         }
     }
 
-    private <T> List<T> dryRun(CompositeSettings compositeSettings, List<Plan<T>> plans) {
+    private <T> List<T> dryRun(CompositeSettings globalSettings, List<Plan<T>> plans) {
         log.debug("Running ${plans.size()} session(s) as dry-run")
         plans.collect { plan ->
             def operations = new DryRunOperations(plan.remote)
-            callWithDelegate(plan.closure, SessionHandler.create(operations, compositeSettings.operationSettings))
+            callWithDelegate(plan.closure, SessionHandler.create(operations, globalSettings))
         }
     }
 
-    private <T> List<T> wetRun(CompositeSettings compositeSettings, List<Plan<T>> plans) {
+    private <T> List<T> wetRun(CompositeSettings globalSettings, List<Plan<T>> plans) {
         log.debug("Running ${plans.size()} session(s)")
-        def manager = new ConnectionManager(compositeSettings.connectionSettings)
+        def manager = new ConnectionManager(globalSettings.connectionSettings)
         try {
             plans.collect { plan ->
                 def connection = manager.connect(plan.remote)
                 def operations = new DefaultOperations(connection)
-                callWithDelegate(plan.closure, SessionHandler.create(operations, compositeSettings.operationSettings))
+                callWithDelegate(plan.closure, SessionHandler.create(operations, globalSettings))
             }
         } finally {
             log.debug('Waiting for pending sessions')
