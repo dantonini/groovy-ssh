@@ -2,6 +2,7 @@ package org.hidetake.groovy.ssh.core
 
 import groovy.transform.EqualsAndHashCode
 import org.hidetake.groovy.ssh.connection.ConnectionSettings
+import org.hidetake.groovy.ssh.extension.settings.SudoSettings
 
 /**
  * Represents a remote host.
@@ -45,6 +46,9 @@ class Remote {
 
     @Delegate
     ConnectionSettings connectionSettings = new ConnectionSettings()
+
+    @Delegate
+    SudoSettings sudoSettings = new SudoSettings()
 
     void role(String role) {
         assert role != null, 'role should be set'
