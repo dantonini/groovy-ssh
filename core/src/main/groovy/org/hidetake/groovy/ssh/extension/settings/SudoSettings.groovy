@@ -12,13 +12,20 @@ class SudoSettings implements Settings<SudoSettings> {
      */
     String sudoPassword
 
+    /**
+     * Sudo executable path.
+     */
+    String sudoPath
+
     static final DEFAULT = new SudoSettings(
             sudoPassword: null,
+            sudoPath: 'sudo',
     )
 
     SudoSettings plus(SudoSettings right) {
         new SudoSettings(
-                sudoPassword: findNotNull(right.sudoPassword, sudoPassword)
+                sudoPassword: findNotNull(right.sudoPassword, sudoPassword),
+                sudoPath: findNotNull(right.sudoPath, sudoPath),
         )
     }
 }

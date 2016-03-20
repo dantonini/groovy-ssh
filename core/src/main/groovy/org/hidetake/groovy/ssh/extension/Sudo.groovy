@@ -107,11 +107,17 @@ trait Sudo implements SessionExtension {
         final Operations operations
         final CommandSettings settings
         final String sudoPassword
+        final String sudoPath
 
         def SudoExecutor(Operations operations1, CompositeSettings globalSettings, SudoCommandSettings methodSettings) {
             operations = operations1
             settings = globalSettings.commandSettings + methodSettings.commandSettings
             sudoPassword = methodSettings.sudoPassword ?: operations.remote.sudoPassword ?: operations.remote.password
+            sudoPath = methodSettings.sudoPath ?: operations.remote.sudoPath ?: SudoSettings.DEFAULT.sudoPath
+            assert operations
+            assert settings
+            assert sudoPassword
+            assert sudoPath
         }
 
         String execute(String commandLine) {
@@ -138,7 +144,7 @@ trait Sudo implements SessionExtension {
                 }
             })
 
-            final sudoCommandLine = "sudo -S -p '$prompt' $commandLine"
+            final sudoCommandLine = "$sudoPath -S -p '$prompt' $commandLine"
             final exitStatus = operations.command(settings + interactionSettings, sudoCommandLine).startSync()
             if (exitStatus != 0 && !settings.ignoreError) {
                 throw new BadExitStatusException("Command returned exit status $exitStatus: $sudoCommandLine", exitStatus)
