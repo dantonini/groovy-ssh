@@ -1,7 +1,6 @@
 package org.hidetake.groovy.ssh.operation
 
 import groovy.transform.EqualsAndHashCode
-import groovy.transform.ToString
 import org.hidetake.groovy.ssh.core.settings.LoggingMethod
 import org.hidetake.groovy.ssh.core.settings.Settings
 
@@ -13,7 +12,6 @@ import static org.hidetake.groovy.ssh.util.Utility.findNotNull
  * @author Hidetake Iwata
  */
 @EqualsAndHashCode
-@ToString
 class ShellSettings implements Settings<ShellSettings> {
     /**
      * Ignores the exit status of the command or shell.

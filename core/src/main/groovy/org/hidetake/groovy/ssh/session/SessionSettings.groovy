@@ -1,7 +1,6 @@
 package org.hidetake.groovy.ssh.session
 
 import groovy.transform.EqualsAndHashCode
-import groovy.transform.ToString
 import org.hidetake.groovy.ssh.core.settings.Settings
 
 import static org.hidetake.groovy.ssh.util.Utility.findNotNull
@@ -12,7 +11,6 @@ import static org.hidetake.groovy.ssh.util.Utility.findNotNull
  * @author Hidetake Iwata
  */
 @EqualsAndHashCode
-@ToString
 class SessionSettings implements Settings<SessionSettings> {
     /**
      * Dry-run flag.
@@ -24,6 +22,11 @@ class SessionSettings implements Settings<SessionSettings> {
      * Extensions for {@link org.hidetake.groovy.ssh.session.SessionHandler}.
      */
     List extensions = []
+
+    /**
+     * Do not show if it is empty or null.
+     */
+    final toString__extensions() { extensions ? extensions : null }
 
     static final DEFAULT = new SessionSettings(
             dryRun: false,
